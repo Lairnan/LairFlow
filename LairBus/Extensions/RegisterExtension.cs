@@ -10,9 +10,8 @@ internal static class RegisterExtension
     private static readonly Type[] Definitions =
     {
         typeof(INotificationHandler<>),
-        typeof(IRequest<>),
         typeof(IRequestHandler<>),
-        typeof(IRequestHandler<,>),
+        typeof(IRequestHandler<,>)
     };
 
     internal static void RegisterServicesFromAssemblies(this IServiceCollection serviceCollection,
@@ -46,8 +45,7 @@ internal static class RegisterExtension
         foreach (var implementationType in concreteTypes)
         {
             var serviceInterfaces = implementationType!.GetInterfaces()
-                .Where(s => (s.IsGenericType && Definitions.Contains(s.GetGenericTypeDefinition()))
-                            || (!s.IsGenericType && (s == typeof(INotification) || s == typeof(IRequest))));
+                .Where(s => s.IsGenericType && Definitions.Contains(s.GetGenericTypeDefinition()));
 
             foreach (var serviceInterface in serviceInterfaces)
                 serviceRegister(serviceInterface, implementationType);
