@@ -12,11 +12,11 @@ internal class Bus : IBus
         _serviceProvider = serviceProvider;
     }
     
-    public async Task SendRequest<T>(T request, CancellationToken cancellationToken = default)
-        where T : IRequest
+    public async Task SendRequest<TRequest>(TRequest request, CancellationToken cancellationToken = default)
+        where TRequest : IRequest
     {
-        var handler = _serviceProvider.GetService<IRequestHandler<T>>();
-        if (handler == null) throw new NullReferenceException(nameof(IRequestHandler<IRequest>));
+        var handler = _serviceProvider.GetService<IRequestHandler<TRequest>>();
+        if (handler == null) throw new NullReferenceException(nameof(IRequestHandler<TRequest>));
         await handler.HandleRequest(request, cancellationToken);
     }
 
@@ -24,14 +24,15 @@ internal class Bus : IBus
         where TRequest : IRequest<TResponse>
     {
         var handler = _serviceProvider.GetService<IRequestHandler<TRequest, TResponse>>();
-        if (handler == null) throw new NullReferenceException(nameof(IRequestHandler<IRequest<TRequest>, TRequest>));
+        if (handler == null) throw new NullReferenceException(nameof(IRequestHandler<TRequest, TResponse>));
         return await handler.HandleRequest(request, cancellationToken);
     }
 
-    public async Task SendNotification(INotification notification, CancellationToken cancellationToken = default)
+    public async Task SendNotification<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
+        where TNotification : INotification
     {
-        var handler = _serviceProvider.GetService<INotificationHandler<INotification>>();
-        if (handler == null) throw new NullReferenceException(nameof(INotificationHandler<INotification>));
+        var handler = _serviceProvider.GetService<INotificationHandler<TNotification>>();
+        if (handler == null) throw new NullReferenceException(nameof(INotificationHandler<TNotification>));
         await handler.HandleNotification(notification, cancellationToken);
     }
 }

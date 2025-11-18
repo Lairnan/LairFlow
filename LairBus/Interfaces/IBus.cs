@@ -2,10 +2,11 @@
 
 public interface IBus
 {
-    Task SendRequest<T>(T request, CancellationToken cancellationToken = default)
-        where T : IRequest;
+    Task SendRequest<TRequest>(TRequest request, CancellationToken cancellationToken = default)
+        where TRequest : IRequest;
     Task<TResponse> SendRequest<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default)
         where TRequest : IRequest<TResponse>;
     
-    Task SendNotification(INotification notification, CancellationToken cancellationToken = default);
+    Task SendNotification<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
+        where TNotification : INotification;
 }
