@@ -12,17 +12,19 @@ internal class Bus : IBus
         _serviceProvider = serviceProvider;
     }
     
-    public async Task SendRequest(IRequest request, CancellationToken cancellationToken = default)
+    public async Task SendRequest<T>(T request, CancellationToken cancellationToken = default)
+        where T : IRequest
     {
-        var handler = _serviceProvider.GetService<IRequestHandler<IRequest>>();
+        var handler = _serviceProvider.GetService<IRequestHandler<T>>();
         if (handler == null) throw new NullReferenceException(nameof(IRequestHandler<IRequest>));
         await handler.HandleRequest(request, cancellationToken);
     }
 
-    public async Task<T> SendRequest<T>(IRequest<T> request, CancellationToken cancellationToken = default)
+    public async Task<TResponse> SendRequest<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default)
+        where TRequest : IRequest<TResponse>
     {
-        var handler = _serviceProvider.GetService<IRequestHandler<IRequest<T>, T>>();
-        if (handler == null) throw new NullReferenceException(nameof(IRequestHandler<IRequest<T>, T>));
+        var handler = _serviceProvider.GetService<IRequestHandler<TRequest, TResponse>>();
+        if (handler == null) throw new NullReferenceException(nameof(IRequestHandler<IRequest<TRequest>, TRequest>));
         return await handler.HandleRequest(request, cancellationToken);
     }
 
