@@ -8,10 +8,10 @@ namespace LairBus;
 
 public static class ServiceCollectionExtension
 {
-    public static IServiceCollection AddBus(this IServiceCollection serviceCollection, Action<BusConfiguration> configure)
+    public static IServiceCollection AddBus(this IServiceCollection serviceCollection, Action<BusConfiguration>? configure = null)
     {
         var busConfiguration = new BusConfiguration();
-        configure.Invoke(busConfiguration);
+        configure?.Invoke(busConfiguration);
         return serviceCollection.AddBus(busConfiguration);
     }
 
