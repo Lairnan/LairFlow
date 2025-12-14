@@ -33,7 +33,9 @@ LairBus - это простая система взаимодействия ко
 
 ## Примеры использования
 
-### Регистрация LairBus в ServiceCollection
+### Пример 1
+
+#### Регистрация LairBus в ServiceCollection
 
 ```csharp
 var serviceCollection = new ServiceCollection();
@@ -43,7 +45,7 @@ serviceCollection.AddBus(config =>
 });
 ```
 
-### Реализация простой команды
+#### Реализация простой команды
 
 ```csharp
 public class TestRequest : IRequest
@@ -60,7 +62,7 @@ public class TestRequestHandler : IRequestHandler<TestRequest>
 }
 ```
 
-### Выполнение команды и получение результата
+#### Выполнение команды и получение результата
 
 ```csharp
 var serviceCollection = new ServiceCollection();
@@ -81,6 +83,68 @@ await bus.SendRequest(new TestRequest
 ```
 
 ---
+
+### Пример 2
+
+#### Регистрация LairBus в ServiceCollection
+
+```csharp
+var serviceCollection = new ServiceCollection();
+serviceCollection.AddBus(config =>
+{
+    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+});
+```
+
+#### Реализация команды с возвращаемой объектом TestModel
+
+```csharp
+public class TestModel
+{
+    public long Id { get; set; }
+    public string Text { get; set; }
+}
+
+public class TestResponseRequest : IRequest<TestModel>
+{
+    public long Id { get; set; }
+    public string Input { get; set; }
+}
+
+public class TestResponseRequestHandler : IRequestHandler<TestResponseRequest, TestModel>
+{
+    public Task<TestModel> HandleRequest(TestResponseRequest request, CancellationToken cancellationToken)
+    {
+        var testModel = new TestModel
+        {
+            Id = request.Id,
+            Text = request.Input
+        };
+        return Task.FromResult(testModel);
+    }
+}
+```
+
+#### Выполнение команды и получение результата
+
+```csharp
+var serviceCollection = new ServiceCollection();
+serviceCollection.AddBus(config =>
+{
+    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+});
+var serviceProvider = serviceCollection.BuildServiceProvider();
+
+var model = await bus.SendRequest<TestModel>(new TestResponseRequest
+{
+    Id = 5,
+    Input = "TEST INPUT"
+});
+Console.WriteLine($"Id: {model.Id}, text: {model.Text}");
+
+// Результат выполнения
+// Id: 5, text: TEST INPUT
+```
 
 ## Совместимость
 

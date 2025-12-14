@@ -33,7 +33,9 @@ Install via Package Manager:
 
 ## Usage examples
 
-### Registering LairBus in ServiceCollection
+### Example 1
+
+#### Registering LairBus in ServiceCollection
 
 ```csharp
 var serviceCollection = new ServiceCollection();
@@ -43,7 +45,7 @@ serviceCollection.AddBus(config =>
 });
 ```
 
-### Implementing a simple command
+#### Implementing a simple command
 
 ```csharp
 public class TestRequest : IRequest
@@ -60,7 +62,7 @@ public class TestRequestHandler : IRequestHandler<TestRequest>
 }
 ```
 
-### Executing a command and getting the result
+#### Executing a command and getting the result
 
 ```csharp
 var serviceCollection = new ServiceCollection();
@@ -78,6 +80,68 @@ await bus.SendRequest(new TestRequest
 
 // Execution result:
 // Executing test request: 5
+```
+
+### Example 2
+
+#### Registering LairBus in ServiceCollection
+
+```csharp
+var serviceCollection = new ServiceCollection();
+serviceCollection.AddBus(config =>
+{
+    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+});
+```
+
+#### Implementing a command with response object TestModel
+
+```csharp
+public class TestModel
+{
+    public long Id { get; set; }
+    public string Text { get; set; }
+}
+
+public class TestResponseRequest : IRequest<TestModel>
+{
+    public long Id { get; set; }
+    public string Input { get; set; }
+}
+
+public class TestResponseRequestHandler : IRequestHandler<TestResponseRequest, TestModel>
+{
+    public Task<TestModel> HandleRequest(TestResponseRequest request, CancellationToken cancellationToken)
+    {
+        var testModel = new TestModel
+        {
+            Id = request.Id,
+            Text = request.Input
+        };
+        return Task.FromResult(testModel);
+    }
+}
+```
+
+#### Executing a command and getting the result
+
+```csharp
+var serviceCollection = new ServiceCollection();
+serviceCollection.AddBus(config =>
+{
+    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+});
+var serviceProvider = serviceCollection.BuildServiceProvider();
+
+var model = await bus.SendRequest<TestModel>(new TestResponseRequest
+{
+    Id = 5,
+    Input = "TEST INPUT"
+});
+Console.WriteLine($"Id: {model.Id}, text: {model.Text}");
+
+// Execution result:
+// Id: 5, text: TEST INPUT
 ```
 
 ---

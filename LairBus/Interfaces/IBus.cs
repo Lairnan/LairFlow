@@ -4,6 +4,10 @@ public interface IBus
 {
     Task SendRequest<TRequest>(TRequest request, CancellationToken cancellationToken = default)
         where TRequest : IRequest;
+
+    Task<TResponse> SendRequest<TResponse>(IRequest<TResponse> request,
+        CancellationToken cancellationToken = default);
+    
     Task<TResponse> SendRequest<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default)
         where TRequest : IRequest<TResponse>;
     
