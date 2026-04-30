@@ -43,8 +43,8 @@ internal class Bus : IBus
     public async Task SendNotification<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
         where TNotification : INotification
     {
-        var handler = _serviceProvider.GetService<INotificationHandler<TNotification>>();
-        if (handler == null) throw new NullReferenceException(nameof(INotificationHandler<TNotification>));
-        await handler.HandleNotification(notification, cancellationToken);
+        var handlers = _serviceProvider.GetServices<INotificationHandler<TNotification>>();
+        foreach (var handler in handlers)
+            await handler.HandleNotification(notification, cancellationToken);
     }
 }
