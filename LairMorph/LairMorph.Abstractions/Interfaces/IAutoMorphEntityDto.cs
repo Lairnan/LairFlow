@@ -1,4 +1,4 @@
-﻿namespace LairMorph.Interfaces;
+﻿namespace LairMorph.Abstractions.Interfaces;
 
 public interface IAutoMorphEntityDto<T> where T : IAutoMorphEntity
 {
