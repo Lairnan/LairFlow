@@ -32,14 +32,25 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\LairMorph.Abstractions\LairMorph.Abstractions.csproj"
-                          ReferenceOutputAssembly="true"
-                          PrivateAssets="all"/>
+    <Target Name="BuildInnerProjectsBeforePack" BeforeTargets="GenerateNuspec">
+        <MSBuild Projects="../LairMorph.Abstractions/LairMorph.Abstractions.csproj"
+                 Targets="Build"
+                 Properties="Configuration=$(Configuration)" />
 
-        <ProjectReference Include="..\LairMorph.Generator\LairMorph.Generator.csproj"
-                          OutputItemType="Analyzer"
-                          ReferenceOutputAssembly="true"
-                          PrivateAssets="all" />
+        <MSBuild Projects="../LairMorph.Generator/LairMorph.Generator.csproj"
+                 Targets="Build"
+                 Properties="Configuration=$(Configuration)" />
+    </Target>
+
+    <ItemGroup>
+        <None Include="../LairMorph.Abstractions/bin/$(Configuration)/net8.0/LairMorph.Abstractions.dll"
+              Pack="true"
+              PackagePath="lib/net8.0/"
+              Visible="false" />
+
+        <None Include="../LairMorph.Generator/bin/$(Configuration)/net8.0/LairMorph.Generator.dll"
+              Pack="true"
+              PackagePath="analyzers/dotnet/cs/"
+              Visible="false" />
     </ItemGroup>
 </Project>
