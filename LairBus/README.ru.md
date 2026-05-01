@@ -41,7 +41,7 @@ LairBus - это простая система взаимодействия ко
 var serviceCollection = new ServiceCollection();
 serviceCollection.AddBus(config =>
 {
-    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    config.RegisterServicesFromAssemblyContaining<Program>();
 });
 ```
 
@@ -68,7 +68,7 @@ public class TestRequestHandler : IRequestHandler<TestRequest>
 var serviceCollection = new ServiceCollection();
 serviceCollection.AddBus(config =>
 {
-    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    config.RegisterServicesFromAssemblyContaining<Program>();
 });
 var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -92,7 +92,7 @@ await bus.SendRequest(new TestRequest
 var serviceCollection = new ServiceCollection();
 serviceCollection.AddBus(config =>
 {
-    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    config.RegisterServicesFromAssemblyContaining<Program>();
 });
 ```
 
@@ -131,7 +131,7 @@ public class TestResponseRequestHandler : IRequestHandler<TestResponseRequest, T
 var serviceCollection = new ServiceCollection();
 serviceCollection.AddBus(config =>
 {
-    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    config.RegisterServicesFromAssemblyContaining<Program>();
 });
 var serviceProvider = serviceCollection.BuildServiceProvider();
 

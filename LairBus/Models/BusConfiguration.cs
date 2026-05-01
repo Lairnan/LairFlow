@@ -8,14 +8,21 @@ public class BusConfiguration
     internal List<Assembly> Assemblies { get; set; } = [];
     public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Transient;
 
-    public void RegisterServicesFromAssembly(Assembly assembly)
+    public BusConfiguration RegisterServicesFromAssembly(Assembly assembly)
     {
         Assemblies.Add(assembly);
+        return this;
     }
 
-    public void RegisterServicesFromAssemblies(params Assembly[] assemblies)
+    public BusConfiguration RegisterServicesFromAssemblies(params Assembly[] assemblies)
     {
         Assemblies.AddRange(assemblies);
+        return this;
+    }
+
+    public BusConfiguration RegisterServicesFromAssemblyContaining<TAssembly>() where TAssembly : class
+    {
+        return RegisterServicesFromAssembly(typeof(TAssembly).Assembly);
     }
 
     public void SetLifeTimeServices(ServiceLifetime lifetime)

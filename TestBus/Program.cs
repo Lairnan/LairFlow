@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using LairBus;
+﻿using LairBus;
 using LairBus.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using TestBus.Model;
@@ -8,7 +7,7 @@ using TestBus.Requests;
 var serviceCollection = new ServiceCollection();
 serviceCollection.AddBus(config =>
 {
-    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    config.RegisterServicesFromAssemblyContaining<Program>();
 });
 var serviceProvider = serviceCollection.BuildServiceProvider();
 
