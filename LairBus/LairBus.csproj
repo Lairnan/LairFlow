@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>LairBus</PackageId>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Title>LairBus</Title>
         <Authors>Lairnan</Authors>
         <Company>Lairnan</Company>
@@ -16,6 +16,9 @@
         <RepositoryUrl>https://github.com/Lairnan/LairFlow/</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageReleaseNotes>
+            Fixed notification dispatch: SendNotification now invokes all registered handlers for the notification type instead of only one.
+        </PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
