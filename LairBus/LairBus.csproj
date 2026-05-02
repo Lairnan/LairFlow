@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>LairBus</PackageId>
-        <Version>1.0.2</Version>
+        <Version>1.0.3</Version>
         <Title>LairBus</Title>
         <Authors>Lairnan</Authors>
         <Company>Lairnan</Company>
@@ -18,11 +18,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageReleaseNotes>
             Fixed:
-            - SendNotification no longer fails when a notification has no registered handlers.
-            - SendNotification now invokes all registered handlers for the notification type instead of only one.
-
-            Added:
-            - Added RegisterServicesFromAssemblyContaining&lt;TAssembly&gt;() to simplify handler registration from the assembly containing.
+            - SendRequest can used without correctly include declaration type
         </PackageReleaseNotes>
     </PropertyGroup>
 

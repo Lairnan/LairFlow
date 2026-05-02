@@ -133,7 +133,7 @@ serviceCollection.AddBus(config =>
 });
 var serviceProvider = serviceCollection.BuildServiceProvider();
 
-var model = await bus.SendRequest<TestModel>(new TestResponseRequest
+var model = await bus.SendRequest(new TestResponseRequest
 {
     Id = 5,
     Input = "TEST INPUT"
